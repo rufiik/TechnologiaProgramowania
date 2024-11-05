@@ -10,7 +10,8 @@ public class LibraryTest {
 
     @Before
     public void setUp() {
-        library = new Library();
+        Database database = new InMemoryDatabase();
+        library = new Library(database);
     }
 
     @Test
@@ -25,7 +26,7 @@ public class LibraryTest {
     @Test
     public void testAddCopy() {
         library.addBook("Test Book", 1);
-        library.addCopy("Test Book", new Scanner(System.in), 2);
+        library.addCopy("Test Book", 2, new Scanner(System.in));
         List<Book> books = library.getBooks();
         assertEquals(1, books.size());
         assertEquals("Test Book", books.get(0).getTitle());

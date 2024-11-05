@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="6" failures="0" name="com.biblioteka.LibraryTest" time="0.123" errors="0" skipped="0">
+<testsuite tests="6" failures="0" name="com.biblioteka.LibraryTest" time="0.062" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="17.0.12+7-Ubuntu-1ubuntu220.04"/>
@@ -58,10 +58,10 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.stdout.encoding" value="UTF-8"/>
   </properties>
-  <testcase classname="com.biblioteka.LibraryTest" name="testDisplayBooks" time="0.012"/>
+  <testcase classname="com.biblioteka.LibraryTest" name="testDisplayBooks" time="0.001"/>
   <testcase classname="com.biblioteka.LibraryTest" name="testAddBook" time="0.001"/>
-  <testcase classname="com.biblioteka.LibraryTest" name="testAddCopy" time="0.081"/>
+  <testcase classname="com.biblioteka.LibraryTest" name="testAddCopy" time="0.042"/>
   <testcase classname="com.biblioteka.LibraryTest" name="testAddReader" time="0.003"/>
-  <testcase classname="com.biblioteka.LibraryTest" name="testBorrowBook" time="0.023"/>
-  <testcase classname="com.biblioteka.LibraryTest" name="testDisplayReaders" time="0.003"/>
+  <testcase classname="com.biblioteka.LibraryTest" name="testBorrowBook" time="0.014"/>
+  <testcase classname="com.biblioteka.LibraryTest" name="testDisplayReaders" time="0.001"/>
 </testsuite>

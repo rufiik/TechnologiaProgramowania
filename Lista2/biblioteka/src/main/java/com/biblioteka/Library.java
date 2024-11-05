@@ -77,8 +77,6 @@ public class Library {
             }
         }
     }
-
-
     /**
      * Metoda addReader dodaje nowego czytelnika do biblioteki.
      * @param name imię czytelnika

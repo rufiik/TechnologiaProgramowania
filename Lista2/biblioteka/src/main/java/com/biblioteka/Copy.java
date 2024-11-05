@@ -3,9 +3,12 @@ package com.biblioteka;
  * Klasa Copy reprezentuje egzemplarz książki.
  * Egzemplarz posiada unikalny identyfikator oraz informację o tym, czy jest wypożyczony.
  * Zastosowane wzorce GRASP:
- * - Information Expert: Klasa Copy jest odpowiedzialna za zarządzanie stanem egzemplarza (wypożyczony/niewypożyczony) oraz jego unikalnym identyfikatorem, ponieważ posiada odpowiednie informacje.
- * - Low Coupling: Klasa Copy ma niskie sprzężenie z innymi klasami, ponieważ jest samodzielna i nie zależy bezpośrednio od innych klas.
- * - High Cohesion: Klasa Copy jest odpowiedzialna tylko za zarządzanie stanem egzemplarza i jego identyfikatorem, co zapewnia wysoką spójność.
+ * - Information Expert: Klasa Copy jest odpowiedzialna za zarządzanie stanem egzemplarza 
+ * (wypożyczony/niewypożyczony) oraz jego unikalnym identyfikatorem, ponieważ posiada odpowiednie informacje.
+ * - Low Coupling: Klasa Copy ma niskie sprzężenie z innymi klasami, 
+ * ponieważ jest samodzielna i nie zależy bezpośrednio od innych klas.
+ * - High Cohesion: Klasa Copy jest odpowiedzialna tylko za zarządzanie 
+ * stanem egzemplarza i jego identyfikatorem, co zapewnia wysoką spójność.
  */
 public class Copy {
     /**idCounter - licznik identyfikatorów egzemplarzy. */
