@@ -10,6 +10,7 @@ Bibliotekarz -> (Wyświetl książki)
 Bibliotekarz -> (Wyświetl czytelników)
 
 Czytelnik -> (Przeglądaj dostępne książki)
+Czytelnik -> (Oddaj książki)
 
 (Dodaj egzemplarz książki) .> (Dodaj książkę) : <<include>>
 (Wypożycz książkę) .> (Przeglądaj dostępne książki) : <<include>>

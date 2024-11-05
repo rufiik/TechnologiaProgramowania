@@ -89,3 +89,25 @@ Poniżej rozpisano szczegółowe scenariusze dla każdego przypadku użycia.
     Scenariusz główny:
         Czytelnik przegląda listę książek dostępnych w systemie.
         System wyświetla listę książek i liczbę dostępnych egzemplarzy.
+8. Oddaj książki
+    Aktor: Czytelnik
+    Cel: Oddanie książki
+    Scenariusz główny:
+    Czytelnik wybiera opcję „Oddaj książki” w systemie.
+    System prosi czytelnika o podanie tytułu książki, którą chce zwrócić.
+    Czytelnik wprowadza tytuł książki.
+    System prosi czytelnika o podanie swojego imienia.
+    Czytelnik wprowadza swoje imię.
+    System sprawdza, czy książka o podanym tytule jest wypożyczona przez czytelnika o podanym imieniu.
+    Jeśli książka jest wypożyczona przez czytelnika:
+    System oznacza książkę jako zwróconą.
+    System zwiększa liczbę dostępnych egzemplarzy książki.
+    System zapisuje zmiany w bazie danych.
+    System wyświetla komunikat: „Książka [tytuł] została zwrócona przez czytelnika [imię].”
+    Jeśli książka nie jest wypożyczona przez czytelnika:
+    System wyświetla komunikat: „Nie znaleziono wypożyczonego egzemplarza książki [tytuł] przez czytelnika [imię].”
+    Scenariusze alternatywny:
+    6a. Jeśli książka o podanym tytule nie istnieje w systemie:
+    System wyświetla komunikat: „Książka o tytule [tytuł] nie została znaleziona w systemie.”
+    6b. Jeśli czytelnik o podanym imieniu nie istnieje w systemie:
+    System wyświetla komunikat: „Czytelnik o imieniu [imię] nie został znaleziony w systemie.”
