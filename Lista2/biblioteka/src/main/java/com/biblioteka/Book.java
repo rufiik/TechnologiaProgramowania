@@ -19,6 +19,8 @@ public final class Book {
 
     /** Lista egzemplarzy książki. */
     private List<Copy> copies;
+/** Liczba egzemplarzy */
+    private int availableCopies;
 
     /**
      * Konstruktor tworzy książkę o podanym tytule.
@@ -27,8 +29,30 @@ public final class Book {
     public Book(final String ptitle) {
         this.title = ptitle;
         this.copies = new ArrayList<>();
+        this.availableCopies = 0; 
     }
-
+    /**
+     * Metoda getAvailableCopies zwraca liczbę dostępnych egzemplarzy książki.
+     * @return liczba dostępnych egzemplarzy książki
+     */
+    public int getAvailableCopies() {
+        return availableCopies;
+    }
+/**
+     * Metoda decrementAvailableCopies zmniejsza liczbę dostępnych egzemplarzy książki.
+     */
+    public void incrementAvailableCopies() {
+        availableCopies++;
+    }
+    /**
+     * Metoda decrementAvailableCopies zmniejsza liczbę dostępnych egzemplarzy książki.
+     * 
+     */
+    public void decrementAvailableCopies() {
+        if (availableCopies > 0) {
+            availableCopies--;
+        }
+    }
     /**
      * Metoda getTitle zwraca tytuł książki.
      * @return tytuł książki
@@ -50,7 +74,8 @@ public final class Book {
      * @param copy egzemplarz książki
      */
     public void addCopy(final Copy copy) {
-        this.copies.add(copy);
+        copies.add(copy);
+        incrementAvailableCopies();
     }
 
     /**

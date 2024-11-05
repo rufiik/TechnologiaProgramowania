@@ -2,7 +2,6 @@ package com.biblioteka;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-
 /**
  * Klasa Library reprezentuje bibliotekę.
  * Biblioteka posiada listę książek oraz listę czytelników.
@@ -33,6 +32,9 @@ public class Library {
      * @param numberOfCopies liczba egzemplarzy książki
      */
     public void addBook(final String title, final int numberOfCopies) {
+        if (numberOfCopies < 0) {
+            throw new InvalidNumberOfCopiesException("Liczba egzemplarzy nie może być ujemna.");
+        }
         Optional<Book> existingBook = database.loadBooks().stream().filter(b -> b.getTitle().equals(title)).findFirst();
         if (existingBook.isPresent()) {
             System.out.println("Książka o tytule " + title + " już istnieje.");
@@ -53,12 +55,16 @@ public class Library {
      * @param scanner skaner do pobierania danych od użytkownika
      */
     public final void addCopy(final String title, final int numberOfCopies, final Scanner scanner) {
+        if (numberOfCopies <= 0) {
+            throw new InvalidNumberOfCopiesException("Liczba egzemplarzy nie może być ujemna lub równa 0.");
+        }
         Optional<Book> book = database.loadBooks().stream().filter(b -> b.getTitle().equals(title)).findFirst();
         if (book.isPresent()) {
+            Book existingBook = book.get();
             for (int i = 0; i < numberOfCopies; i++) {
-                book.get().addCopy(new Copy());
+                existingBook.addCopy(new Copy());
             }
-            database.saveBook(book.get());
+            database.saveBook(existingBook);
             System.out.println("Dodano " + numberOfCopies + " egzemplarzy dla książki: " + title);
         } else {
             System.out.println("Nie znaleziono książki o tytule: " + title);
@@ -66,21 +72,26 @@ public class Library {
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("tak")) {
                 addBook(title, numberOfCopies);
-                System.out.println("Dodano książkę: " + title + " z " + numberOfCopies + " egzemplarzami.");
             } else {
                 System.out.println("Nie dodano książki do biblioteki.");
             }
         }
     }
 
+
     /**
      * Metoda addReader dodaje nowego czytelnika do biblioteki.
      * @param name imię czytelnika
      */
     public void addReader(final String name) {
-        Reader reader = new Reader(name);
-        database.saveReader(reader);
-        System.out.println("Dodano czytelnika: " + name);
+        Optional<Reader> existingReader = database.loadReaders().stream().filter(r -> r.getName().equals(name)).findFirst();
+        if (existingReader.isPresent()) {
+            System.out.println("Czytelnik o imieniu " + name + " już istnieje.");
+        } else {
+            Reader reader = new Reader(name);
+            database.saveReader(reader);
+            System.out.println("Dodano czytelnika: " + name);
+        }
     }
 
     /**
@@ -92,11 +103,16 @@ public class Library {
         Optional<Book> book = database.loadBooks().stream().filter(b -> b.getTitle().equals(title)).findFirst();
         Optional<Reader> reader = database.loadReaders().stream().filter(r -> r.getName().equals(readerName)).findFirst();
         if (book.isPresent() && reader.isPresent()) {
-            Optional<Copy> copy = book.get().getCopies().stream().filter(c -> !c.isBorrowed()).findFirst();
-            if (copy.isPresent()) {
-                copy.get().setBorrowed(true);
-                database.saveBook(book.get());
-                System.out.println("Książka " + title + " została wypożyczona czytelnikowi " + readerName);
+            int availableCopies = book.get().getAvailableCopies();
+            if (availableCopies > 0) {
+                Optional<Copy> copy = book.get().getCopies().stream().filter(c -> !c.isBorrowed()).findFirst();
+                if (copy.isPresent()) {
+                    reader.get().borrowCopy(copy.get());
+                    book.get().decrementAvailableCopies();
+                    database.saveBook(book.get());
+                    
+                    System.out.println("Książka " + title + " została wypożyczona czytelnikowi " + readerName);
+                }
             } else {
                 System.out.println("Brak dostępnych egzemplarzy książki " + title);
             }
@@ -104,27 +120,47 @@ public class Library {
             System.out.println("Nie znaleziono książki lub czytelnika.");
         }
     }
-
+ /**
+     * Metoda returnBook zwraca książkę przez czytelnika.
+     * @param title tytuł książki
+     * @param readerName imię czytelnika
+     */
+    public void returnBook(final String title, final String readerName) {
+        Optional<Book> book = database.loadBooks().stream().filter(b -> b.getTitle().equals(title)).findFirst();
+        Optional<Reader> reader = database.loadReaders().stream().filter(r -> r.getName().equals(readerName)).findFirst();
+        if (book.isPresent() && reader.isPresent()) {
+            Optional<Copy> copy = book.get().getCopies().stream().filter(c -> c.isBorrowed()).findFirst();
+            if (copy.isPresent()) {
+                reader.get().returnCopy(copy.get());
+                book.get().incrementAvailableCopies();
+                database.saveBook(book.get());
+                
+                System.out.println("Książka " + title + " została zwrócona przez czytelnika " + readerName);
+            } else {
+                System.out.println("Nie znaleziono wypożyczonego egzemplarza książki " + title);
+            }
+        } else {
+            System.out.println("Nie znaleziono książki lub czytelnika.");
+        }
+    }
     /**
      * Metoda displayBooks wyświetla listę książek w bibliotece.
      */
     public void displayBooks() {
         System.out.println("Lista książek w bibliotece:");
         for (Book book : database.loadBooks()) {
-            System.out.println("Tytuł: " + book.getTitle() + ", liczba egzemplarzy: " + book.getCopies().size());
+            System.out.println("Tytuł: " + book.getTitle() + ", liczba egzemplarzy: " + book.getAvailableCopies());
         }
     }
-
     /**
      * Metoda displayReaders wyświetla listę czytelników w bibliotece.
      */
     public void displayReaders() {
         System.out.println("Lista czytelników w bibliotece:");
         for (Reader reader : database.loadReaders()) {
-            System.out.println("Imię: " + reader.getName());
+            System.out.println("Imię: " + reader.getName() + ", wypożyczone książki: " + reader.getBorrowedCopies().size());
         }
     }
-
     /**
      * Zwraca listę książek w bibliotece.
      * @return lista książek
@@ -132,12 +168,23 @@ public class Library {
     public List<Book> getBooks() {
         return database.loadBooks();
     }
-
     /**
      * Zwraca listę czytelników w bibliotece.
      * @return lista czytelników
      */
     public List<Reader> getReaders() {
         return database.loadReaders();
+    }
+       /**
+     * Wyjątek rzucany, gdy liczba egzemplarzy jest nieprawidłowa (ujemna).
+     */
+    public static class InvalidNumberOfCopiesException extends RuntimeException {
+        /**
+         * Konstruktor tworzy wyjątek z podaną wiadomością.
+         * @param message
+         */
+        public InvalidNumberOfCopiesException(String message) {
+            super(message);
+        }
     }
 }

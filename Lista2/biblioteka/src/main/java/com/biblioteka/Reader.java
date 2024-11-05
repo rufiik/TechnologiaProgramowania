@@ -44,7 +44,7 @@ public class Reader {
  * @param copy - egzemplarz do wypożyczenia
  */
     public void borrowCopy(final Copy copy) {
-        copy.borrow();
+        copy.setBorrowed(true);
         borrowedCopies.add(copy);
     }
 /**
@@ -52,7 +52,7 @@ public class Reader {
  * @param copy - egzemplarz do zwrotu
  */
     public void returnCopy(final Copy copy) {
-        copy.returnCopy();
+        copy.setBorrowed(false);
         borrowedCopies.remove(copy);
     }
 }

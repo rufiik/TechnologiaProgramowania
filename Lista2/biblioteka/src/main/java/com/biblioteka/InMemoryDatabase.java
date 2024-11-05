@@ -21,7 +21,8 @@ public class InMemoryDatabase implements Database {
  * @param book - książka do zapisania
  */
     @Override
-    public void saveBook(final Book book) {
+    public void saveBook(Book book) {
+        books.removeIf(b -> b.getTitle().equals(book.getTitle()));
         books.add(book);
     }
 /**

@@ -1,5 +1,7 @@
 package com.biblioteka;
 import java.util.Scanner;
+
+import com.biblioteka.Library.InvalidNumberOfCopiesException;
 /**
  * Klasa LibraryApp jest główną klasą aplikacji bibliotecznej.
  * Umożliwia użytkownikowi dodawanie książek, egzemplarzy, czytelników,
@@ -25,8 +27,10 @@ public final class LibraryApp {
     private static final int DISPLAY_BOOKS = 5;
     /**DISPLAY_READERS - wyświetlenie czytelników. */
     private static final int DISPLAY_READERS = 6;
+    /**RETURN_BOOK - oddanie książki. */
+    private static final int RETURN_BOOK = 7;
     /**EXIT - wyjście z programu. */
-    private static final int EXIT = 7;
+    private static final int EXIT = 8;
     /**
      * Prywatny konstruktor, aby zapobiec instancjonowaniu klasy.
      */
@@ -50,10 +54,12 @@ public final class LibraryApp {
             System.out.println("4. Wypożycz książkę");
             System.out.println("5. Wyświetl książki");
             System.out.println("6. Wyświetl czytelników");
-            System.out.println("7. Wyjdź");
+            System.out.println("7. Oddaj książkę");
+            System.out.println("8. Wyjdź");
 
             int choice = scanner.nextInt();
             scanner.nextLine();  // Pobierz nową linię po wczytaniu liczby
+            try{
             switch (choice) {
                 case ADD_BOOK:
                     System.out.print("Podaj tytuł książki: ");
@@ -89,6 +95,13 @@ public final class LibraryApp {
                 case DISPLAY_READERS:
                     library.displayReaders();
                     break;
+                case RETURN_BOOK:
+                    System.out.print("Podaj tytuł książki: ");
+                    title = scanner.nextLine();
+                    System.out.print("Podaj imię czytelnika: ");
+                    String name1 = scanner.nextLine();
+                    library.returnBook(title, name1);
+                    break;
                 case EXIT:
                     System.out.println("Do widzenia!");
                     scanner.close();
@@ -96,6 +109,9 @@ public final class LibraryApp {
                 default:
                     System.out.println("Nieprawidłowy wybór.");
             }
+        }catch(InvalidNumberOfCopiesException e){
+            System.out.println("Błąd: " + e.getMessage());
         }
+    }
     }
 }
